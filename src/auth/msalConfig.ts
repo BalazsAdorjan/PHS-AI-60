@@ -15,10 +15,10 @@ export const msalConfig: Configuration = {
   auth: {
     clientId,
     authority: `https://login.microsoftonline.com/${tenantId}`,
-    // The popup will navigate to this URI after auth — it must be a registered
-    // SPA redirect URI in the Azure portal. Using /blank.html keeps the popup
-    // self-contained and prevents the auth code from landing on the main window.
-    redirectUri: `${window.location.origin}/blank.html`,
+    // The popup lands back on the main app. MSAL v5 detects it is running
+    // inside a popup (window.opener exists), processes the auth code, posts
+    // the token back to the opener, and closes itself — no blank.html needed.
+    redirectUri: window.location.origin,
     postLogoutRedirectUri: window.location.origin,
   },
   cache: {
