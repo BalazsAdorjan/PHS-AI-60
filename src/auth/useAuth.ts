@@ -53,7 +53,9 @@ export function useAuth(): {
   return { user, isAuthenticated, isLoading, login, logout };
 }
 
-// Initialise MSAL once before the app mounts
+// Initialise MSAL once before the app mounts.
+// If running inside the popup (window.opener exists), handleRedirectPromise()
+// will post the token to the opener and close this window automatically.
 export async function initializeMsal() {
   await msalInstance.initialize();
   await msalInstance.handleRedirectPromise();

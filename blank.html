@@ -1,7 +1,17 @@
 <!DOCTYPE html>
-<html>
-  <head><title>Auth</title></head>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Auth</title>
+  </head>
   <body>
-    <script type="module" src="/src/auth/popup.ts"></script>
+    <!--
+      MSAL popup redirect target.
+      Loads the full app bundle — MSAL detects window.opener on startup,
+      calls handleRedirectPromise(), posts the token to the main window,
+      and closes this popup automatically. Nothing is rendered visually.
+    -->
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
