@@ -1,0 +1,20 @@
+{
+  "routes": [
+    {
+      "route": "/blank.html",
+      "serve": "/blank.html"
+    },
+    {
+      "route": "/*",
+      "serve": "/index.html",
+      "statusCode": 200
+    }
+  ],
+  "navigationFallback": {
+    "rewrite": "/index.html",
+    "exclude": ["/assets/*", "/*.css", "/*.js", "/blank.html"]
+  },
+  "mimeTypes": {
+    ".json": "application/json"
+  }
+}
