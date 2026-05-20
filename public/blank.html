@@ -1,11 +1,29 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Auth</title>
-  </head>
+  <head><title>Auth</title></head>
   <body>
-    <!-- This page is used exclusively as the MSAL popup redirect target.
-         MSAL reads the auth code from the URL, posts it to the main window,
-         and closes this popup automatically. Nothing is rendered here. -->
+    <!--
+      MSAL popup redirect landing page.
+      The client ID is not a secret — it is already embedded in the public JS bundle.
+      This page loads msal-browser, calls handleRedirectPromise(), which reads the
+      auth code from the URL, posts it back to the main window via postMessage,
+      and closes the popup. The main window's MSAL instance receives it and
+      completes the login flow.
+    -->
+    <script src="https://alcdn.msauth.net/browser/3.28.1/js/msal-browser.min.js"></script>
+    <script>
+      (async () => {
+        const pca = new msalBrowser.PublicClientApplication({
+          auth: {
+            clientId: '8e7e386a-659d-43ee-a80d-f8a88e3ce038',
+            authority: 'https://login.microsoftonline.com/0f6f68be-4ef2-465a-986b-eb9a250d9789',
+            redirectUri: window.location.origin + '/blank.html',
+          },
+          cache: { cacheLocation: 'sessionStorage' },
+        });
+        await pca.initialize();
+        await pca.handleRedirectPromise();
+      })();
+    </script>
   </body>
 </html>
