@@ -11,7 +11,7 @@ import { PublicClientApplication } from '@azure/msal-browser';
       authority: `https://login.microsoftonline.com/${import.meta.env.VITE_ENTRA_TENANT_ID as string}`,
       redirectUri: `${window.location.origin}/blank.html`,
     },
-    cache: { cacheLocation: 'sessionStorage' },
+    cache: { cacheLocation: 'localStorage' },
   });
   await pca.initialize();
   await pca.handleRedirectPromise();
