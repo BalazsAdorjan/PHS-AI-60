@@ -15,10 +15,10 @@ export const msalConfig: Configuration = {
   auth: {
     clientId,
     authority: `https://login.microsoftonline.com/${tenantId}`,
-    // The popup lands back on the main app. MSAL v5 detects it is running
-    // inside a popup (window.opener exists), processes the auth code, posts
-    // the token back to the opener, and closes itself — no blank.html needed.
-    redirectUri: window.location.origin,
+    // Popup lands on /blank.html which is its own Vite entry point bundled
+    // with msal-browser. It calls handleRedirectPromise(), posts the token
+    // back to the main window, and closes itself.
+    redirectUri: `${window.location.origin}/blank.html`,
     postLogoutRedirectUri: window.location.origin,
   },
   cache: {

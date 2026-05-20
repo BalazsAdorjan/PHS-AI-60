@@ -16,7 +16,7 @@ export function useAuth(): {
   user: AuthUser | null;
   isAuthenticated: boolean;
   isLoading: boolean;
-  login: () => void;
+  login: () => Promise<void>;
   logout: () => void;
 } {
   const { instance, inProgress, accounts } = useMsal();
@@ -35,14 +35,16 @@ export function useAuth(): {
       }
     : null;
 
-  // Full-page redirect — works with just the plain origin as redirect URI.
-  // No popup, no blank.html, no extra portal configuration needed.
-  const login = () => {
-    instance.loginRedirect(loginRequest);
+  const login = async () => {
+    try {
+      await instance.loginPopup(loginRequest);
+    } catch (err) {
+      console.warn('[Auth] login cancelled or failed', err);
+    }
   };
 
   const logout = () => {
-    instance.logoutRedirect({
+    instance.logoutPopup({
       account: account ?? undefined,
       postLogoutRedirectUri: window.location.origin,
     });
@@ -51,9 +53,7 @@ export function useAuth(): {
   return { user, isAuthenticated, isLoading, login, logout };
 }
 
-// Called once before the app mounts.
-// handleRedirectPromise() processes the auth code on the way back from Entra
-// and stores the account — must complete before rendering.
+// Initialise MSAL once before the app mounts
 export async function initializeMsal() {
   await msalInstance.initialize();
   await msalInstance.handleRedirectPromise();
